@@ -12,6 +12,27 @@ The example generates temporary keys in memory for Alice, Bob, and Charlie.
 It does not persist keys, use a server, or provide production-ready key
 management.
 
+## Cryptography fundamentals: symmetric vs. asymmetric
+
+**Symmetric encryption** uses the same secret key to encrypt and decrypt data.
+It is efficient, including for larger payloads, but the communicating parties
+need a secure way to share that key. In this demo, AES-GCM is the symmetric
+cipher: all group members use the shared AES key to protect messages.
+
+**Asymmetric encryption** uses a mathematically related public/private key
+pair. A sender can encrypt data with the recipient's public key, and only the
+matching private key can decrypt it. The public key can be distributed; the
+private key must be kept secret. RSA-OAEP is the asymmetric encryption scheme
+used here to protect each recipient's copy of the AES key.
+
+Each approach solves a different problem: symmetric encryption is fast for
+message data, while asymmetric encryption makes it possible to address a
+secret to a recipient without first sharing that secret over a secure channel.
+This demo combines them in a **hybrid encryption** design: RSA-OAEP wraps the
+small AES key, and AES-GCM encrypts the actual messages. This is a common
+pattern because public-key encryption is not intended for large message
+payloads.
+
 ## Key concepts and message flow
 
 ### Public/private key pairs
